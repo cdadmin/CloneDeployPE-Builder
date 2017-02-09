@@ -205,6 +205,7 @@
 	set SRC=%OPTIONAL%\ExtraFiles\WinPE %WinPEVersion% %PLATFORM%
 	robocopy "%SRC%" "%CONTENT%" *.* /e /ndl /nfl /xj /r:0 /w:0
 	echo %WebURL% > "%CONTENT%\Windows\System32\web.txt"
+	if [%UniversalToken%] NEQ [] echo %UniversalToken% > "%CONTENT%\Windows\System32\uToken.txt"
 	echo ===============================================================================
 	
 	goto :eof

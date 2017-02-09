@@ -1,6 +1,14 @@
 ﻿. x:\winpe_menu.ps1
 
 $script:web=$(Get-Content x:\windows\system32\web.txt).Trim()
+try
+{
+    $private:uToken=$(Get-Content x:\windows\system32\uToken.txt -ErrorAction Ignore).Trim()
+}
+catch
+{
+    #Suppress error if universal token is not used
+}
 $script:curlOptions="-sSk"
 powercfg /s 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
 
@@ -90,59 +98,68 @@ function Assign-Static-IP()
 
 Test-Server-Conn
 clear
-Write-Host " ** CloneDeploy Login To Continue Or Close Window To Cancel ** "
-Write-Host
-Write-Host
-$private:loginCount = 1
-while($private:loginCount -le 2)
+
+if ($private:uToken)
 {
-    $private:username = Read-Host -Prompt "username"
-    $private:password = Read-Host -Prompt "password" -AsSecureString
-    $private:decodedpassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($private:password))
+    $private:userToken=$private:uToken
+    $script:userId=0
+}
+else
+{
+    Write-Host " ** CloneDeploy Login To Continue Or Close Window To Cancel ** "
+    Write-Host
+    Write-Host
+    $private:loginCount = 1
+    while($private:loginCount -le 2)
+    {
+        $private:username = Read-Host -Prompt "username"
+        $private:password = Read-Host -Prompt "password" -AsSecureString
+        $private:decodedpassword = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto([System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($private:password))
  
-    $private:usernameBytes = [System.Text.Encoding]::UTF8.GetBytes($private:username)
-    $private:usernameEncoded =[Convert]::ToBase64String($private:usernameBytes)
+        $private:usernameBytes = [System.Text.Encoding]::UTF8.GetBytes($private:username)
+        $private:usernameEncoded =[Convert]::ToBase64String($private:usernameBytes)
 
-    $private:passwordBytes = [System.Text.Encoding]::UTF8.GetBytes($private:decodedpassword)
-    $private:passwordEncoded =[Convert]::ToBase64String($private:passwordBytes)
+        $private:passwordBytes = [System.Text.Encoding]::UTF8.GetBytes($private:decodedpassword)
+        $private:passwordEncoded =[Convert]::ToBase64String($private:passwordBytes)
 
-    $private:loginResult=$(curl.exe -sSk -F username="$private:usernameEncoded" -F password="$private:passwordEncoded" -F clientIP="" -F task="" "${script:web}ConsoleLogin" --connect-timeout 10 --stderr -)
-    $private:loginResult=$private:loginResult | ConvertFrom-Json
-    if(!$?)
-    {
-        $Error[0].Exception.Message
-        $private:loginResult
-        exit 1
-    }
-    else
-    {
-        if($private:loginResult.valid -eq "true")
+        $private:loginResult=$(curl.exe -sSk -F username="$private:usernameEncoded" -F password="$private:passwordEncoded" -F clientIP="" -F task="" "${script:web}ConsoleLogin" --connect-timeout 10 --stderr -)
+        $private:loginResult=$private:loginResult | ConvertFrom-Json
+        if(!$?)
         {
-            Write-Host
-            Write-Host " ...... Login Successful"
-            Write-Host
-            $private:userToken=$private:loginResult.user_token
-            $script:userId=$private:loginResult.user_id
-            break
+            $Error[0].Exception.Message
+            $private:loginResult
+            exit 1
         }
         else
         {
-            if($private:loginCount -eq 2)
+            if($private:loginResult.valid -eq "true")
             {
-                Write-Host 
-                Write-Host " ...... Incorrect Login...Exiting"
                 Write-Host
-                exit 1
+                Write-Host " ...... Login Successful"
+                Write-Host
+                $private:userToken=$private:loginResult.user_token
+                $script:userId=$private:loginResult.user_id
+                break
             }
             else
             {
-                Write-Host
-                Write-Host " ...... Incorrect Login...Try Again"
-                Write-Host
+                if($private:loginCount -eq 2)
+                {
+                    Write-Host 
+                    Write-Host " ...... Incorrect Login...Exiting"
+                    Write-Host
+                    exit 1
+                }
+                else
+                {
+                    Write-Host
+                    Write-Host " ...... Incorrect Login...Try Again"
+                    Write-Host
+                }
             }
         }
+        $private:loginCount++
     }
-    $private:loginCount++
 }
 
 Encode-User-Token -userToken $private:userToken

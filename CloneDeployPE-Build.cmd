@@ -5,6 +5,7 @@
 	set TimeZone=Eastern Standard Time
 	set MyLang=en-us
 	set WebURL=http://192.168.56.1/clonedeploy/service/client.asmx/
+	set UniversalToken=
 	set CreateISO=true
 	
 	set PLATFORM=x64

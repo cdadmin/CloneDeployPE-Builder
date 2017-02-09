@@ -67,9 +67,8 @@ echo ===========================================================================
 		if NOT "%ADK10%" == "Not Found" robocopy "%ADK10%\Assessment and Deployment Kit\Deployment Tools\x86\BCDBoot" "%BUILDS%\ISO-Support\Support\WinPE10x86" *.* /njh /njs /ndl /nfl /r:0 /w:0
 		if NOT "%ADK10%" == "Not Found" robocopy "%ADK10%\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg" "%BUILDS%\ISO-Support\Support\WinPE10x64" *.* /njh /njs /ndl /nfl /r:0 /w:0
 		if NOT "%ADK10%" == "Not Found" robocopy "%ADK10%\Assessment and Deployment Kit\Deployment Tools\x86\Oscdimg" "%BUILDS%\ISO-Support\Support\WinPE10x86" *.* /njh /njs /ndl /nfl /r:0 /w:0
-		if NOT "%ADK10%" == "Not Found" robocopy "%ADK10%\Assessment and Deployment Kit\Windows Preinstallation Environment\%PLATFORMARCHITECTURE%\Media\Boot" "%BUILDS%\tftpboot\boot" boot.sdi /njh /njs /ndl /nfl /r:0 /w:0
 	)
-	
+	if NOT "%ADK10%" == "Not Found" robocopy "%ADK10%\Assessment and Deployment Kit\Windows Preinstallation Environment\%PLATFORMARCHITECTURE%\Media\Boot" "%BUILDS%\tftpboot\boot" boot.sdi /njh /njs /ndl /nfl /r:0 /w:0
 ::	Set location of oscdimg
 	if %WinPEVersion% NEQ 3 set OSCDIMG=%WindowsKit%\Assessment and Deployment Kit\Deployment Tools\%PROCESSOR_ARCHITECTURE%\Oscdimg\oscdimg.exe
 	if exist "%BUILDS%\ISO-Support\Support\WinPE%WinPEVersion%%PLATFORM%\oscdimg.exe" set OSCDIMG=%BUILDS%\ISO-Support\Support\WinPE%WinPEVersion%%PLATFORM%\oscdimg.exe

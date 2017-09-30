@@ -1,4 +1,4 @@
-﻿. x:\winpe_menu.ps1
+﻿. x:\wie_menu.ps1
 
 $script:web=$(Get-Content x:\windows\system32\web.txt).Trim()
 try
@@ -166,12 +166,12 @@ Encode-User-Token -userToken $private:userToken
 clear
 
 Write-Host " ** Downloading Core Scripts ** "
-foreach($scriptName in "winpe_task_select.ps1","winpe_global_functions.ps1","winpe_pull.ps1","winpe_ond.ps1","winpe_push.ps1","winpe_reporter.ps1","winpe_menu.ps1","winpe_register.ps1")
+foreach($scriptName in "wie_task_select.ps1","wie_global_functions.ps1","wie_upload.ps1","wie_ond.ps1","wie_deploy.ps1","wie_reporter.ps1","wie_register.ps1")
 {
   $private:dlResult=$(curl.exe $script:curlOptions -H Authorization:$script:userTokenEncoded --data "scriptName=$scriptName" ${script:web}DownloadCoreScripts -o x:\$scriptName -w "%{http_code}" --connect-timeout 10 --stderr x:\dlerror.log)
   Check-Download -dlResult $private:dlResult -scriptName $scriptName
 }
 Write-Host " ...... Success"
 
-. x:\winpe_task_select.ps1
+. x:\wie_task_select.ps1
 

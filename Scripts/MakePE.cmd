@@ -1,7 +1,7 @@
 @echo off
 
 ::Set MakePE Version
-	set MakePEVersion=20151013
+	set MakePEVersion=20151014
 	set WinPEVersion=10
 	
 ::Set MakePE Directory
@@ -204,7 +204,7 @@
 	::Extra Files for WinPE %WinPEVersion% %PLATFORM% Configurations
 	set SRC=%OPTIONAL%\ExtraFiles\WinPE %WinPEVersion% %PLATFORM%
 	robocopy "%SRC%" "%CONTENT%" *.* /e /ndl /nfl /xj /r:0 /w:0
-	echo %WebURL% > "%CONTENT%\Windows\System32\web.txt"
+	echo %BaseURL%api/ClientImaging/ > "%CONTENT%\Windows\System32\web.txt"
 	if [%UniversalToken%] NEQ [] echo %UniversalToken% > "%CONTENT%\Windows\System32\uToken.txt"
 	echo ===============================================================================
 	

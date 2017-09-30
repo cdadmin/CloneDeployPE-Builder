@@ -4,7 +4,7 @@
 	::	Time Zone Reference http://technet.microsoft.com/en-us/library/cc749073(v=ws.10).aspx
 	set TimeZone=Eastern Standard Time
 	set MyLang=en-us
-	set WebURL=http://192.168.56.1/clonedeploy/service/client.asmx/
+	set BaseURL=http://0.0.0.0/clonedeploy/
 	set UniversalToken=
 	set CreateISO=true
 	

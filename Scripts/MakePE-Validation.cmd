@@ -244,7 +244,7 @@ echo ===========================================================================
 	)
 	
 	REM	echo ===============================================================================
-	if /I "%WebURL%" == "http://0.0.0.0/clonedeploy/service/client.asmx/" (
+	if /I "%BaseURL%" == "http://0.0.0.0/clonedeploy/" (
 	echo ===============================================================================
 	echo CloneDeploy Web Service Was Not Set
 	echo CloneDeploy Web Service Was Not Set >> "%MyLog%"

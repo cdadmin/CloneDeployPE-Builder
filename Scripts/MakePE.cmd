@@ -239,12 +239,12 @@ echo ===========================================================================
 	if /I "%PLATFORM%" == "x86" (
 		set name="CloneDeploy WinPE 10 x86"
 		set guid={aaaaaaaa-1032-aaaa-aaaa-aaaaaaaaaaaa}
-		set bootwim="\Boot\WinPE10x86.wim"
+		set bootwim="\boot\WinPE10x86.wim"
 	)
 	if /I "%PLATFORM%" == "x64" (
 		set name="CloneDeploy WinPE 10 x64"
 		set guid={aaaaaaaa-1064-aaaa-aaaa-aaaaaaaaaaaa}
-		set bootwim="\Boot\WinPE10x64.wim"
+		set bootwim="\boot\WinPE10x64.wim"
 	)
 	bcdedit /store %STORE% /create %guid% /application osloader /d %name%
 	bcdedit /store %STORE% /set %guid% systemroot \windows
